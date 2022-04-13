@@ -11,52 +11,23 @@ namespace Vending_Machine
         bool hasMoney = true;
         bool hasProduct = true;
         int userChoice;
+        public int total;
         int user;
-        List<Product> products = new List<Product>();
-       
-       
-        public List<int> moneyPool = new List<int>();
+        public List<Product> products;
+        public List<int> moneyPool;
 
-        
+
         private int[] moneyDenominations = new int[8] {1,5,10,20,50,100,500,1000};
         public int[] MoneyDenominations { get { return moneyDenominations; } }
 
         public VendingMachine()
         {
+            products = new List<Product>();
+            moneyPool = new List<int>();
+            total = 0;
             FillWithProducts();
         }
 
-
-        //Enum.IsDefined(typeof(coins), user)
-        //enum coins 
-        //{
-        //    One = 1,
-        //    Five = 5,
-        //    Ten = 10,
-        //    Twenty = 20,
-        //    Fifty = 50,
-        //    Hundred = 100,
-        //    FiveHundred = 500,
-        //    Thousand = 1000,
-        //};
-        //public int[] ConvertListToArray(List<int> list)
-        //{
-        //    if(list == null)
-        //    {
-        //        int[] number = { 0 };
-        //        return number;
-        //    }
-        //    else
-        //    {
-        //        int[] result = new int[list.Count];
-
-        //        for (int i = 0; i < list.Count; i++)
-        //        {
-        //            result[i] = list[i];
-        //        }
-        //        return result;
-        //    }
-        //}
 
         public void FillWithProducts()
         {
@@ -73,69 +44,81 @@ namespace Vending_Machine
         }
         public void BuyProduct(Product product)
         {
-            Console.WriteLine($"Total amount of money: {UpdateMoneyPool(product)}\n");
-            Console.WriteLine(" You have purchased " + product.Info + "\n");
-
-            do
+            if(total >= product.Price)
             {
-                Console.WriteLine("\nPress 1 to Examine a product");
-                Console.WriteLine("Press 2 to Use a product");
-                Console.WriteLine("Press 3 to continue buying");
-                Console.WriteLine("Press 0 to exit and get the change");
+                total = UpdateMoneyPool(product);
+                Console.WriteLine($"Total amount of money: {total}\n");
+                Console.WriteLine(" You have purchased " + product.Info + "\n");
 
-                try
+                do
                 {
+                    Console.WriteLine("\nPress 1 to Examine a product");
+                    Console.WriteLine("Press 2 to Use a product");
+                    Console.WriteLine("Press 3 to Continue buying");
+                    Console.WriteLine("Press 0 to Stop buying and get the change");
 
-                    userChoice = int.Parse(Console.ReadLine());
-
-
-                    switch (userChoice)
+                    try
                     {
-                        case 1:
-                            product.Examine();
-                            hasProduct = true;
-                            break;
-                        case 2:
-                            product.Use();
-                            hasProduct = true;
-                            break;
-                        case 3:
-                            hasProduct = false;
-                            break;
-                        case 0:
-                            // exit and get a change 
-                            hasProduct = false;
-                            break;
 
-                        default:
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Please choose between 0 or 3\n");
-                            Console.WriteLine("===========================================================\n");
-                            Console.ResetColor();
-                            break;
+                        userChoice = int.Parse(Console.ReadLine());
+
+
+                        switch (userChoice)
+                        {
+                            case 1:
+                                Console.WriteLine($"Total amount of money: {total}\n");
+                                product.Examine();
+                                hasProduct = true;
+                                break;
+                            case 2:
+                                Console.WriteLine($"Total amount of money: {total}\n");
+                                product.Use();
+                                hasProduct = true;
+                                break;
+                            case 3:
+                                hasProduct = false;
+                                break;
+                            case 0:
+                                EndTransaction(); 
+                                hasProduct = false;
+                                hasMoney = false;
+                                break;
+
+                            default:
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Please choose between 0 or 3\n");
+                                Console.WriteLine("===========================================================\n");
+                                Console.ResetColor();
+                                break;
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Only numbers allowed. \nPlease choose between 0 or 3\n");
+                        Console.WriteLine("===========================================================\n");
+                        Console.ResetColor();
+                    };
+
+
                 }
-                catch (Exception ex)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Only numbers allowed. \nPlease choose between 0 or 3\n");
-                    Console.WriteLine("===========================================================\n");
-                    Console.ResetColor();
-                };
-
-
+                while (hasProduct);
             }
-            while (hasProduct);
+            else
+            {
+                Console.WriteLine("You don't have enough money to buy this product.\nInsert more money if you wish to buy this item.");
+                hasMoney = false;
+                hasProduct = false;
+            }
+
 
         }
-
-        
         
         public void Purchase()
         {
-            if (moneyPool.Sum() > 0) {
+            if (total > 0) {
 
-                //Console.WriteLine($"Total amount of money: {moneyPool.Sum()}\n");
+                Console.WriteLine($"Total amount of money: {total}\n");
                 ShowAll();
 
                 do
@@ -151,12 +134,12 @@ namespace Vending_Machine
 
                         userChoice = int.Parse(Console.ReadLine());
 
-
+                        
                         switch (userChoice)
                         {
                             case 1:
                                 BuyProduct(products[0]);
-
+                                
                                 break;
                             case 2:
                                 BuyProduct(products[1]);
@@ -174,7 +157,7 @@ namespace Vending_Machine
 
                             default:
                                 Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Please enter 1 or 2\n");
+                                Console.WriteLine("Only numbers allowed. \nPlease enter between 1 and 4\n");
                                 Console.WriteLine("===========================================================\n");
                                 Console.ResetColor();
                                 break;
@@ -183,7 +166,7 @@ namespace Vending_Machine
                     catch (Exception ex)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Only numbers allowed. \nPlease enter 1 or 4\n");
+                        Console.WriteLine("Only numbers allowed. \nPlease enter between 1 and 4\n");
                         Console.WriteLine("===========================================================\n");
                         Console.ResetColor();
                     };
@@ -193,15 +176,23 @@ namespace Vending_Machine
             }
             else
             {
-                Console.WriteLine("You don't have enough moneyto buy product's.");
+                Console.WriteLine("You don't have enough money to buy product's.");
             }
         }
 
         public int UpdateMoneyPool(Product product)
         {
-            int result = moneyPool.Sum() - product.Price;
+            if (total > 0)
+            {
+                int result = total - product.Price;
 
-            return result;
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
+            
         }
 
         public void ShowAll()
@@ -217,9 +208,27 @@ namespace Vending_Machine
         }
         public void EndTransaction()
         {
-            // write method to return existing value from userMoneyInserted
-            // returns money from the moneyPool
+
+            if(total == 0)
+            {
+                Console.WriteLine("No money to return.");
+               
+            }
+            else
+            {
+                
+                Console.WriteLine($"Returned money : {total} kr \n");
+                total = Reset(total);
+            }
         }
+
+        public int Reset(int amount)
+        {
+            amount = 0;
+
+            return amount;
+        }
+
 
         public void InsertMoney()
         {
@@ -233,12 +242,19 @@ namespace Vending_Machine
                 if (moneyDenominations.Contains(user))
                 {
                     Console.WriteLine("Coin accepted");
+
+                    if(total > 0)
+                    {
+                        moneyPool.Clear();
+                        moneyPool.Add(total);
+
+                        
+                    }
+
                     moneyPool.Add(user);
-                 
-                    //for(int i = 0; i < userMoneyInserted.Count; i++)
-                    //{
-                    //    Console.WriteLine("Monety w zbiorze "+userMoneyInserted[i]);
-                    //}
+                    total = moneyPool.Sum();
+
+
                 }
                 else
                 {
@@ -258,6 +274,7 @@ namespace Vending_Machine
 
 
         }
+
 
 
 

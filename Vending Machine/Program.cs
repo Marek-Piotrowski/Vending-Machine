@@ -2,15 +2,7 @@
 
 namespace Vending_Machine // Note: actual namespace depends on the project name.
 
-    // requirements
-    
-    
-    
-    
-    // when user buys the product he can use it right away. Show him the menu, to continue buying, stop buying, consume the product
-    // by consume use a product method to show a message, f.ex You have drinked water etc
-
-    //
+   
     // make unit tests
         // - return value from end transaction method
 {
@@ -25,7 +17,6 @@ namespace Vending_Machine // Note: actual namespace depends on the project name.
             Utils utils = new Utils();
             VendingMachine machine = new VendingMachine();
 
-            
 
             utils.Intro();
 

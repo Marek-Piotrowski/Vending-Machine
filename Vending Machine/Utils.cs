@@ -8,14 +8,9 @@ namespace Vending_Machine
 {
     public class Utils
     {
-        double userNumber;
-        double sum;
-        
-        
-        
         public void Menu(VendingMachine machine)
         {
-            Console.WriteLine($"Total amount of money: {machine.moneyPool.Sum()}\n");
+            Console.WriteLine($"Total amount of money: {machine.total}\n");
             Console.WriteLine("MENU:");
             Console.WriteLine("1 -  Purchase a product");
             Console.WriteLine("2 -  Show all products");
@@ -39,80 +34,19 @@ namespace Vending_Machine
             Console.WriteLine("===========================================================\n\n");
             Console.ResetColor();
         }
-        public void CatchWarrning()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Only numbers allowed. Use period sign for decimal numbers.");
-            Console.WriteLine("===========================================================\n\n");
-            Console.ResetColor();
-        }
 
-        //public double ConvertToDouble(string userInput)
-        //{
-        //    if (userInput.Contains(','))
-        //    {
-        //        string newNum1 = userInput.Replace(',', '.');
-        //        userNumber = double.Parse(newNum1);
-        //        return userNumber;
-
-        //    }
-        //    else
-        //    {
-        //        userNumber = double.Parse(userInput);
-        //        return userNumber;
-        //    }
-        //}
+       
         
-        public double AddUp(double num1, double num2)
-        {
-            this.sum = num1 + num2;
-            return sum;
-        }
         
-        public double AddUp(double[] num1)
-        {
-            //only overload purpose
-            return sum;
-        }
         
-        public double Subtract(double num1, double num2)
-        {
-            this.sum = num1 - num2;
-            return sum;
-        }
         
-        public double Subtract(double[] num1)
-        {
-            //only overload purpose
-            
-            return sum;
-        }
         
-        public double Multiply(double num1, double num2)
-        {
-            this.sum = num1 * num2;
-            return sum;
-        }
         
-        public double Divide(double num1, double num2)
-        {
-            if (num2 == 0)
-            {
-                throw new DivideByZeroException("Division by zero not allowed\n\n");
-            }
-            else
-            {
-                this.sum = num1 / num2;
-
-                return sum;
-            }
-            
-        }
-        public void Result(double sum)
-        {
-            Console.WriteLine("\nEquals: " + sum);
-            Console.WriteLine("\n===========================================================\n");
-        }
+        
+        
+        
+        
+        
 
 
     }
