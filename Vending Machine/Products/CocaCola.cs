@@ -10,12 +10,12 @@ namespace Vending_Machine
     {
         public override void Examine()
         {
-            Console.WriteLine($"{Info} in 0,33l can with price tag {Price}");
+            Console.WriteLine($"{Info} in 0,33l can with price tag {Price} \n");
         }
 
         public override void Use()
         {
-            Console.WriteLine($"You just drinked your {Info}");
+            Console.WriteLine($"You just drinked your {Info} \n");
         }
 
 

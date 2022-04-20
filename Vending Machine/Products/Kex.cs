@@ -11,12 +11,12 @@ namespace Vending_Machine
 
         public override void Examine()
         {
-            Console.WriteLine($"{Info} is a waffle with chocolate. Most popular in Sweden. Price tag is {Price}");
+            Console.WriteLine($"{Info} is a waffle with chocolate. Most popular in Sweden. Price tag is {Price} \n");
         }
 
         public override void Use()
         {
-            Console.WriteLine($"You just eated your {Info}.");
+            Console.WriteLine($"You just eated your {Info}.\n");
         }
     }
 }

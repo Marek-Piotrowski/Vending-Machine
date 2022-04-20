@@ -13,41 +13,45 @@ namespace Vending_Machine
         int userChoice;
         public int total;
         int user;
-        public List<Product> products;
+        
         public List<int> moneyPool;
+        public List<Product> products;
 
-
-        private int[] moneyDenominations = new int[8] {1,5,10,20,50,100,500,1000};
+        private int[] moneyDenominations;
         public int[] MoneyDenominations { get { return moneyDenominations; } }
 
-        public VendingMachine()
+        public VendingMachine(List<Product> emptyProducts)
         {
-            products = new List<Product>();
+            
+            products = FillWithProducts(emptyProducts);
             moneyPool = new List<int>();
+            moneyDenominations = new int[8] { 1, 5, 10, 20, 50, 100, 500, 1000 };
             total = 0;
-            FillWithProducts();
+            
         }
 
 
-        public void FillWithProducts()
+        public List<Product> FillWithProducts(List<Product> machineShelfs)
         {
             CocaCola cola = new CocaCola() { Info = "Coca cola", Price = 25 };
             Kex kex = new Kex() { Info = "Kex", Price = 35 };
             Snickers snickers = new Snickers() { Info = "Snickers", Price = 20 };
             Ramlosa ramlosa = new Ramlosa() { Info = "Ramlosa", Price = 25 };
 
-            products.Add(cola);
-            products.Add(kex);
-            products.Add(snickers);
-            products.Add(ramlosa);
+            machineShelfs.Add(cola);
+            machineShelfs.Add(kex);
+            machineShelfs.Add(snickers);
+            machineShelfs.Add(ramlosa);
+
+            return machineShelfs;
 
         }
         public void BuyProduct(Product product)
         {
             if(total >= product.Price)
             {
-                total = UpdateMoneyPool(product);
-                Console.WriteLine($"Total amount of money: {total}\n");
+                total = UpdateTotalValue(product);
+                Console.WriteLine($"Total amount of money: {total} kr \n");
                 Console.WriteLine(" You have purchased " + product.Info + "\n");
 
                 do
@@ -66,12 +70,12 @@ namespace Vending_Machine
                         switch (userChoice)
                         {
                             case 1:
-                                Console.WriteLine($"Total amount of money: {total}\n");
+                                Console.WriteLine($"Total amount of money: {total} kr \n");
                                 product.Examine();
                                 hasProduct = true;
                                 break;
                             case 2:
-                                Console.WriteLine($"Total amount of money: {total}\n");
+                                Console.WriteLine($"Total amount of money: {total} kr \n");
                                 product.Use();
                                 hasProduct = true;
                                 break;
@@ -94,10 +98,7 @@ namespace Vending_Machine
                     }
                     catch (Exception ex)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Only numbers allowed. \nPlease choose between 0 or 3\n");
-                        Console.WriteLine("===========================================================\n");
-                        Console.ResetColor();
+                        Utils.WrongInput();
                     };
 
 
@@ -106,9 +107,9 @@ namespace Vending_Machine
             }
             else
             {
-                Console.WriteLine("You don't have enough money to buy this product.\nInsert more money if you wish to buy this item.");
                 hasMoney = false;
                 hasProduct = false;
+                throw new NotEnoughMoneyException("You don't have enough money to buy this product.\nInsert more money if you wish to buy this item.");
             }
 
 
@@ -118,7 +119,7 @@ namespace Vending_Machine
         {
             if (total > 0) {
 
-                Console.WriteLine($"Total amount of money: {total}\n");
+                Console.WriteLine($"Total amount of money: {total} kr \n");
                 ShowAll();
 
                 do
@@ -156,19 +157,17 @@ namespace Vending_Machine
                                 break;
 
                             default:
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Only numbers allowed. \nPlease enter between 1 and 4\n");
-                                Console.WriteLine("===========================================================\n");
-                                Console.ResetColor();
+                                Utils.Ending();
                                 break;
                         }
                     }
+                    catch(NotEnoughMoneyException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                     catch (Exception ex)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Only numbers allowed. \nPlease enter between 1 and 4\n");
-                        Console.WriteLine("===========================================================\n");
-                        Console.ResetColor();
+                        Utils.WrongInput();
                     };
 
                 }
@@ -176,11 +175,11 @@ namespace Vending_Machine
             }
             else
             {
-                Console.WriteLine("You don't have enough money to buy product's.");
+                throw new NotEnoughMoneyException("You don't have enough money to buy product's.");
             }
         }
 
-        public int UpdateMoneyPool(Product product)
+        public int UpdateTotalValue(Product product)
         {
             if (total > 0)
             {
@@ -195,30 +194,45 @@ namespace Vending_Machine
             
         }
 
-        public void ShowAll()
+        public bool ShowAll()
         {
-
-            Console.WriteLine("You can buy :\n");
-
-            for (int i = 0; i < products.Count; i++)
+            if(products.Count > 0)
             {
-                Console.WriteLine(" "+(i + 1) +": "+ products[i].Info+ "   "+ products[i].Price+" kr");
-            }
-            
-        }
-        public void EndTransaction()
-        {
+                Console.WriteLine("Available products :\n");
 
-            if(total == 0)
-            {
-                Console.WriteLine("No money to return.");
-               
+                for (int i = 0; i < products.Count; i++)
+                {
+                    Console.WriteLine(" " + (i + 1) + ": " + products[i].Info + "   " + products[i].Price + " kr");
+                }
+                return true;
             }
             else
             {
                 
+                Console.WriteLine("Machine has no products.");
+                return false;
+            }
+            
+            
+        }
+        public int EndTransaction()
+        {
+
+            if(total == 0)
+            {
+                Console.WriteLine("No money to return.\n");
+                //total = 0;
+                //return total;
+                throw new NoMoneyToReturnException("No money to return");
+                
+               
+            }
+            else
+            {
                 Console.WriteLine($"Returned money : {total} kr \n");
+                moneyPool.Clear();
                 total = Reset(total);
+                return total;
             }
         }
 
@@ -228,6 +242,35 @@ namespace Vending_Machine
 
             return amount;
         }
+
+        public bool UserInsertsMoney(int userCoin)
+        {
+                if (moneyDenominations.Contains(userCoin))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+        }
+
+        public int TotalAmountInMachine(int userCoin)
+        {
+            if(total > 0)
+            {
+                moneyPool.Clear();
+                moneyPool.Add(total);
+                
+            }
+            
+            moneyPool.Add(userCoin);
+            total = moneyPool.Sum();
+
+            return total;
+            
+        }
+
 
 
         public void InsertMoney()
@@ -239,35 +282,30 @@ namespace Vending_Machine
                 Console.WriteLine("Insert money:");
                 user = int.Parse(Console.ReadLine());
 
-                if (moneyDenominations.Contains(user))
+
+
+                if (UserInsertsMoney(user))
                 {
-                    Console.WriteLine("Coin accepted");
+                    Console.WriteLine("Coin accepted\n");
 
-                    if(total > 0)
-                    {
-                        moneyPool.Clear();
-                        moneyPool.Add(total);
-
-                        
-                    }
-
-                    moneyPool.Add(user);
-                    total = moneyPool.Sum();
-
+                    total = TotalAmountInMachine(user);
 
                 }
                 else
                 {
-                    Console.WriteLine("Wrong coin.");
+                    throw new WrongCoinException("Invalid coin.\n");
+                    
                 }
+            }
+            catch (WrongCoinException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Only 1, 5, 10, 20, 50, 100, 500, 1000 kr allowed.");
-                Console.WriteLine("===========================================================\n\n");
-                Console.ResetColor();
+
+               Utils.WrongInput();
+                
             }
 
             

@@ -16,12 +16,12 @@ namespace Vending_Machine
         // Examine, to show product price and info
         public virtual void Examine()
         {
-            Console.WriteLine($"Product description{info} and product price tag{price}");
+            Console.WriteLine($"Product description{info} and product price tag{price} \n");
         }
         // Use, to show a message to user that he used product
         public virtual void Use()
         {
-            Console.WriteLine($"You just used {info}");
+            Console.WriteLine($"You just used {info} \n");
         }
     }
 }

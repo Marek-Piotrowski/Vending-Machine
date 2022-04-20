@@ -14,15 +14,17 @@ namespace Vending_Machine // Note: actual namespace depends on the project name.
             
             int user;
             bool goodIndex = true;
-            Utils utils = new Utils();
-            VendingMachine machine = new VendingMachine();
+            
+            List<Product> products = new List<Product>();
+
+            VendingMachine machine = new VendingMachine(products);
 
 
-            utils.Intro();
+            Utils.Intro();
 
             do
             {
-                utils.Menu(machine);
+                Utils.Menu(machine);
 
                 try
                 {
@@ -47,19 +49,25 @@ namespace Vending_Machine // Note: actual namespace depends on the project name.
                             machine.EndTransaction();
                             break;
                         default:
-                            utils.Ending();
+                            Utils.Ending();
                             break;
                     }
                 }
+                catch (NotEnoughMoneyException ex)
+                {
+                    Console.WriteLine(ex.Message); 
+                }
                 catch (Exception ex)
                 {
-                    utils.Ending();
+                    Utils.Ending();
 
                 };
             }
             while (goodIndex);
             Console.WriteLine("Program closed");
         }
+
+        
     }
 }
 
