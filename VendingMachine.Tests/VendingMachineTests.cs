@@ -7,69 +7,72 @@ namespace VendingMachineTests
 {
     public class VendingMachineTests
     {
-        
+        private List<Product> _products;
+        private VendingMachine _machine;
+        public VendingMachineTests()
+        {
+            _products = new List<Product>();
+            _machine = new VendingMachine(_products);
+
+        }
+
         [Fact]
+        [Trait("Category", "Money")]
         public void ValidCoinInserted()
         {
-            //initialize variables
-            List<Product> products = new List<Product>();
-            VendingMachine machine = new VendingMachine(products);
+            //variables
             int userCoin = 100;
 
-
             //Invoke method to test
-            var result = machine.UserInsertsMoney(userCoin);
+            var result = _machine.UserInsertsMoney(userCoin);
 
             //Verify
             Assert.True(result);
         }
 
         [Fact]
+        [Trait("Category", "Money")]
         public void InvalidCoinInserted()
         {
-            
-            List<Product> products = new List<Product>();
-            VendingMachine machine = new VendingMachine(products);
+
+            //variables
             int userCoin = 59;
 
 
-            
-            var result = machine.UserInsertsMoney(userCoin);
+            //Invoke method to test
+            var result = _machine.UserInsertsMoney(userCoin);
 
-            
+            //Verify
             Assert.False(result);
         }
 
         [Fact]
+        [Trait("Category", "Money")]
         public void NoMoneyToReturnTest()
         {
 
-            List<Product> products = new List<Product>();
-            VendingMachine machine = new VendingMachine(products);
-            
+            //variables
+            _machine.total = 0;
 
-            machine.total = 0;
+            //Invoke method to test
+            Action result = () => _machine.EndTransaction();
 
-
-
-            Action result = () => machine.EndTransaction();
             //Verify
-
             NoMoneyToReturnException exception = Assert.Throws<NoMoneyToReturnException>(result);
             Assert.Equal("No money to return", exception.Message);
             
         }
 
         [Fact]
+        [Trait("Category", "Money")]
         public void MoneyToReturnExists()
         {
 
-            List<Product> products = new List<Product>();
-            VendingMachine machine = new VendingMachine(products);
+            //variables
             int userCoin1 = 100;
 
-
-            int result = machine.TotalAmountInMachine(userCoin1);
+            //Invoke method to test
+            int result = _machine.TotalAmountInMachine(userCoin1);
 
             //Verify
             Assert.Equal(userCoin1, result); 
@@ -79,31 +82,123 @@ namespace VendingMachineTests
 
 
         [Fact]
+        [Trait("Category", "Products")]
         public void VendingMachineHasProducts()
         {
-            
-            List<Product> products = new List<Product>();
-            VendingMachine machine = new VendingMachine(products);
 
-            
-            var result = machine.ShowAll();
+            // variables in constructor
+
+            var result = _machine.ShowAll();
 
             
             Assert.True(result);
         }
 
         [Fact]
+        [Trait("Category", "Products")]
         public void VendingMachineHasNoProducts()
         {
-            
-            List<Product> products = new List<Product>();
-            VendingMachine machine = new VendingMachine(products);
-            machine.products.Clear();
 
-            var result = machine.ShowAll();
+            // variables
+            // in constructor
 
+            //Invoke method to test
+            _machine.products.Clear();
+
+            var result = _machine.ShowAll();
+
+            //Verify
             Assert.False(result);
         }
+
+        [Fact]
+        [Trait("Category", "Money")]
+        public void MachineStartsWithNoMoney()
+        {
+            //initialize variables
+            // in constructor
+
+            //Invoke method to test
+            int result = _machine.total;
+
+            //Verify
+            Assert.Equal(0, result);
+        }
+
+        
+
+        [Fact]
+        [Trait("Category", "Products")]
+        public void HaveCocaCola()
+        {
+            //initialize variables
+            // in constructor
+
+            //Invoke method to test
+            List<Product> allproducts = _machine.products;
+
+            //Verify
+            Assert.Contains(allproducts, item => item.Info == "Coca cola");
+        }
+
+        [Fact]
+        [Trait("Category", "Products")]
+        public void HaveKex()
+        {
+            //initialize variables
+            // in constructor
+
+            //Invoke method to test
+            List<Product> allproducts = _machine.products;
+
+            //Verify
+            Assert.Contains(allproducts, item => item.Info == "Kex");
+        }
+
+
+        [Fact]
+        [Trait("Category", "Products")]
+        public void HaveSnickers()
+        {
+            //initialize variables
+            // in constructor
+
+            //Invoke method to test
+            List<Product> allproducts = _machine.products;
+
+            //Verify
+            Assert.Contains(allproducts, item => item.Info == "Snickers");
+        }
+
+        [Fact]
+        [Trait("Category", "Products")]
+        public void HaveRamlosa()
+        {
+            //initialize variables
+            // in constructor
+
+            //Invoke method to test
+            List<Product> allproducts = _machine.products;
+
+            //Verify
+            Assert.Contains(allproducts, item => item.Info == "Ramlosa");
+        }
+
+        [Fact]
+        [Trait("Category","Products")]
+        public void ProductDoesNotExist()
+        {
+            //initialize variables
+            // in constructor
+
+            //Invoke method to test
+            List<Product> allproducts = _machine.products;
+
+            //Verify
+            Assert.DoesNotContain(allproducts, item => item.Info == "Yogi");
+        }
+
+        
 
 
 
