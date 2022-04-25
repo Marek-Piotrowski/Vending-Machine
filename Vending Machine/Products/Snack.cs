@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 
 namespace Vending_Machine
 {
-    public class CocaCola : Product
+    public class Snack : Product
     {
+
         public override void Examine()
         {
-            Console.WriteLine($"{Info} in 0,33l can with price tag {Price} \n");
+            Console.WriteLine($"This is {Info}. Price tag is {Price} \n");
         }
 
         public override void Use()
         {
-            Console.WriteLine($"You just drinked your {Info} \n");
+            Console.WriteLine($"You just eated your {Info}.\n");
         }
-
-
     }
 }

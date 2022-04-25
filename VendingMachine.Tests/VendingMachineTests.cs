@@ -143,6 +143,34 @@ namespace VendingMachineTests
 
         [Fact]
         [Trait("Category", "Products")]
+        public void HaveApple()
+        {
+            //initialize variables
+            // in constructor
+
+            //Invoke method to test
+            List<Product> allproducts = _machine.products;
+
+            //Verify
+            Assert.Contains(allproducts, item => item.Info == "Apple");
+        }
+
+        [Fact]
+        [Trait("Category", "Products")]
+        public void HaveSandwitchWithChicken()
+        {
+            //initialize variables
+            // in constructor
+
+            //Invoke method to test
+            List<Product> allproducts = _machine.products;
+
+            //Verify
+            Assert.Contains(allproducts, item => item.Info == "Sandwich with chicken");
+        }
+
+        [Fact]
+        [Trait("Category", "Products")]
         public void HaveKex()
         {
             //initialize variables

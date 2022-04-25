@@ -33,15 +33,20 @@ namespace Vending_Machine
 
         public List<Product> FillWithProducts(List<Product> machineShelfs)
         {
-            CocaCola cola = new CocaCola() { Info = "Coca cola", Price = 25 };
-            Kex kex = new Kex() { Info = "Kex", Price = 35 };
-            Snickers snickers = new Snickers() { Info = "Snickers", Price = 20 };
-            Ramlosa ramlosa = new Ramlosa() { Info = "Ramlosa", Price = 25 };
+            Drink cola = new Drink() { Info = "Coca cola", Price = 25 };
+            Snack kex = new Snack() { Info = "Kex", Price = 35 };
+            Snack snickers = new Snack() { Info = "Snickers", Price = 20 };
+            Drink ramlosa = new Drink() { Info = "Ramlosa", Price = 25 };
+            Fruit apple = new Fruit() { Info = "Apple", Price = 15 };
+            Sandwich chicken = new Sandwich() { Info = "Sandwich with chicken", Price = 25 };
 
             machineShelfs.Add(cola);
             machineShelfs.Add(kex);
             machineShelfs.Add(snickers);
             machineShelfs.Add(ramlosa);
+            machineShelfs.Add(apple);
+            machineShelfs.Add(chicken);
+
 
             return machineShelfs;
 
@@ -128,6 +133,8 @@ namespace Vending_Machine
                     Console.WriteLine("Press 2 to buy Kex");
                     Console.WriteLine("Press 3 to buy Snickers");
                     Console.WriteLine("Press 4 to buy Ramlosa");
+                    Console.WriteLine("Press 5 to buy Apple");
+                    Console.WriteLine("Press 6 to buy Sandwich with chicken");
                     Console.WriteLine("Press 0 to return");
 
                     try
@@ -150,6 +157,12 @@ namespace Vending_Machine
                                 break;
                             case 4:
                                 BuyProduct(products[3]);
+                                break;
+                            case 5:
+                                BuyProduct(products[4]);
+                                break;
+                            case 6:
+                                BuyProduct(products[5]);
                                 break;
                             case 0:
                                 Console.WriteLine("Stop buying");
@@ -217,19 +230,196 @@ namespace Vending_Machine
         }
         public int EndTransaction()
         {
+            int[] coinsToReturn = new int[8];
+            bool moneyToReturnExists = true;
 
             if(total == 0)
             {
                 Console.WriteLine("No money to return.\n");
                 //total = 0;
                 //return total;
+                
                 throw new NoMoneyToReturnException("No money to return");
                 
                
             }
             else
             {
-                Console.WriteLine($"Returned money : {total} kr \n");
+                while (moneyToReturnExists)
+                {
+                    //// 1000kr 
+                    //if (total / moneyDenominations[7] >= 1)
+                    //{
+                    //    double wholeCoins = total / moneyDenominations[7];
+                    //    char coin = wholeCoins.ToString().ElementAt(0);
+
+                    //    int restValue = total % moneyDenominations[7];
+                    //    Console.WriteLine($"Returned money {coin} x 1000 kr \n");
+                    //    total = restValue;
+
+                    //    if (total == 0)
+                    //    {
+                    //        moneyToReturnExists = false;
+                    //    }
+                        
+                    //    continue;
+                    //}
+                    
+
+                    //// 500 kr
+                    //if (total / moneyDenominations[6] >= 1)
+                    //{
+                    //    double wholeCoins = total / moneyDenominations[6];
+                    //    char coin = wholeCoins.ToString().ElementAt(0);
+
+                    //    int restValue = total % moneyDenominations[6];
+                    //    Console.WriteLine($"Returned money {coin} x 500 kr \n");
+                    //    total = restValue;
+
+                    //    if (total == 0)
+                    //    {
+                    //        moneyToReturnExists = false;
+                    //    }
+                        
+                    //    continue;
+                    //}
+
+                    //// 100 kr
+                    //if (total / moneyDenominations[5] >= 1)
+                    //{
+                    //    double wholeCoins = total / moneyDenominations[5];
+                    //    char coin = wholeCoins.ToString().ElementAt(0);
+
+                    //    int restValue = total % moneyDenominations[5];
+                    //    Console.WriteLine($"Returned money {coin} x 100 kr \n");
+                    //    total = restValue;
+
+                    //    if (total == 0)
+                    //    {
+                    //        moneyToReturnExists = false;
+                    //    }
+                        
+                    //    continue;
+                    //}
+
+                    //// 50 kr
+                    //if (total / moneyDenominations[4] >= 1)
+                    //{
+                    //    double wholeCoins = total / moneyDenominations[4];
+                    //    char coin = wholeCoins.ToString().ElementAt(0);
+
+                    //    int restValue = total % moneyDenominations[4];
+                    //    Console.WriteLine($"Returned money {coin} x 50 kr \n");
+                    //    total = restValue;
+
+                    //    if (total == 0)
+                    //    {
+                    //        moneyToReturnExists = false;
+                    //    }
+                        
+                    //    continue;
+                    //}
+
+                    //// 20 kr
+                    //if (total / moneyDenominations[3] >= 1)
+                    //{
+                    //    double wholeCoins = total / moneyDenominations[3];
+                    //    char coin = wholeCoins.ToString().ElementAt(0);
+
+                    //    int restValue = total % moneyDenominations[3];
+                    //    Console.WriteLine($"Returned money {coin} x 20 kr \n");
+                    //    total = restValue;
+
+                    //    if (total == 0)
+                    //    {
+                    //        moneyToReturnExists = false;
+                    //    }
+                        
+                    //    continue;
+                    //}
+
+                    //// 10 kr
+                    //if (total / moneyDenominations[2] >= 1)
+                    //{
+                    //    double wholeCoins = total / moneyDenominations[2];
+                    //    char coin = wholeCoins.ToString().ElementAt(0);
+
+                    //    int restValue = total % moneyDenominations[2];
+                    //    Console.WriteLine($"Returned money {coin} x 10 kr \n");
+                    //    total = restValue;
+
+                    //    if (total == 0)
+                    //    {
+                    //        moneyToReturnExists = false;
+                    //    }
+                        
+                    //    continue;
+                    //}
+
+                    //// 5 kr
+                    //if (total / moneyDenominations[1] >= 1)
+                    //{
+                    //    double wholeCoins = total / moneyDenominations[1];
+                    //    char coin = wholeCoins.ToString().ElementAt(0);
+
+                    //    int restValue = total % moneyDenominations[1];
+                    //    Console.WriteLine($"Returned money {coin} x 5 kr \n");
+                    //    total = restValue;
+
+                    //    if(total == 0)
+                    //    {
+                    //        moneyToReturnExists = false;
+                    //    }
+                        
+                    //    continue;
+                    //}
+
+                    //// 1 kr
+                    //if (total / moneyDenominations[0] >= 1)
+                    //{
+                    //    double wholeCoins = total / moneyDenominations[0];
+                    //    char coin = wholeCoins.ToString().ElementAt(0);
+
+                    //    int restValue = total % moneyDenominations[0];
+                    //    Console.WriteLine($"Returned money {coin} x 1 kr \n");
+                    //    total = restValue;
+
+                    //    if (total == 0)
+                    //    {
+                    //        moneyToReturnExists = false;
+                    //    }
+                        
+                    //    continue;
+                    //}
+
+                    for(int i = 7; total > 0 ; i--)
+                    {
+                        if (total / moneyDenominations[i] >= 1)
+                        {
+                            double wholeCoins = total / moneyDenominations[i];
+                            char coin = wholeCoins.ToString().ElementAt(0);
+
+                            int restValue = total % moneyDenominations[i];
+                            Console.WriteLine($"Returned money {coin} x {moneyDenominations[i]} kr \n");
+                            total = restValue;
+
+                            if (total == 0)
+                            {
+                                moneyToReturnExists = false;
+                            }
+
+                            continue;
+                        }
+
+                    }
+
+
+
+
+                }
+                
+                //Console.WriteLine($"Rest money to return : {total} kr \n");
+
                 moneyPool.Clear();
                 total = Reset(total);
                 return total;
@@ -271,8 +461,6 @@ namespace Vending_Machine
             
         }
 
-
-
         public void InsertMoney()
         {
             
@@ -313,7 +501,7 @@ namespace Vending_Machine
 
         }
 
-
+        
 
 
     }

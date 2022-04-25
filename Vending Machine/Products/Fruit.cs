@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vending_Machine
 {
-    public class Snickers : Product
+    public class Fruit : Product
     {
 
         public override void Examine()
         {
-            Console.WriteLine($"{Info} is a bar with chocolate and carmel. Price tag is {Price}.\n");
+            Console.WriteLine($"This is {Info}. Price tag is {Price}.\n");
         }
 
         public override void Use()
